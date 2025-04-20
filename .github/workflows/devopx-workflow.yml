@@ -1,0 +1,38 @@
+name: Devopx Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  register-environments:
+    name: Register Environments to DynamoDB
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.head_commit.message, github.event.commits.*.modified), 'devopx-env.json')
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install devopx-cli
+        run: npm install -g devopx-cli
+
+      - name: Run devopx register-environments
+        run: devopx register-environments
+
+  deploy:
+    name: Deploy Job
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running deploy stage..."
+
+  promote:
+    name: Promote Job
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running promote stage..."
