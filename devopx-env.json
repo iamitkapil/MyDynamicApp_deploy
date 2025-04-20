@@ -1,2 +1,35 @@
-{}
+{
+   "dev": {
+    "branch": "main",
+    "manifest_path": "env/dev/manifest.json",
+    "is_dev": true,
+    "is_prod": false,
+    "trigger_on_update": false,
+    "promo_source_projects": [],
+    "required_validations": [],
+    "required_environments": []
+    },
+    
+    "sit": {
+    "branch": "main",
+    "manifest_path": "env/sit/manifest.json",
+    "is_dev": false,
+    "is_prod": false,
+    "trigger_on_update": false,
+    "promo_source_projects": [],
+    "required_validations": [], 
+    "required_environments": [["dev"]]
+    },
+    
+    "ppd": {
+    "branch": "main",
+    "manifest_path": "env/ppd/manifest.json",
+    "is_dev": false,
+    "is_prod": false,
+    "trigger_on_update": false,
+    "promo_source_projects": [],
+    "required_validations": [], 
+    "required_environments": [["dev","sit"]]
+    }
+}
     
