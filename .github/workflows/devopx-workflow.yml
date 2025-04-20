@@ -9,7 +9,9 @@ jobs:
   register-environments:
     name: Register Environments to DynamoDB
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: |
+      github.event_name == 'push' &&
+      contains(join(github.event.commits.*.modified, ','), 'devopx-env.json')
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -23,11 +25,7 @@ jobs:
         run: npm install -g devopx-cli
 
       - name: Run devopx register-environments
-        run: devopx register-environments
-
-    paths:
-      - devopx-env.json
-
+        run: devopx register-environment
 
   deploy:
     name: Deploy Job
