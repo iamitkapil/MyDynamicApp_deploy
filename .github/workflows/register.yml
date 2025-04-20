@@ -24,4 +24,4 @@ jobs:
         run: npm install -g devopx-cli
 
       - name: Run devopx register-environments
-        run: devopx register-environments
+        run: devopx register-environment
