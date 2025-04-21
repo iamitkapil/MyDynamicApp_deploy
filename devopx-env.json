@@ -31,17 +31,6 @@
     "promo_source_projects": [],
     "required_validations": [], 
     "required_environments": [["dev","sit"]]
-    },
-
-    "prd": {
-    "branch": "main",
-    "manifest_path": "env/ppd/manifest.json",
-    "is_dev": false,
-    "is_prod": true,
-    "trigger_on_update": false,
-    "promo_source_projects": [],
-    "required_validations": [], 
-    "required_environments": [["dev","sit"]]
     }
 }
     
