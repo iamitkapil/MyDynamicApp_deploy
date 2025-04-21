@@ -11,9 +11,9 @@
     "required_environments": []
     },
     
-    "sita": {
+    "sit": {
     "branch": "main",
-    "manifest_path": "env/sita/manifest.json",
+    "manifest_path": "env/sit/manifest.json",
     "is_dev": false,
     "is_prod": false,
     "trigger_on_update": false,
@@ -30,7 +30,7 @@
     "trigger_on_update": false,
     "promo_source_projects": [],
     "required_validations": [], 
-    "required_environments": [["dev","sita"]]
+    "required_environments": [["dev","sit"]]
     }
 }
     
