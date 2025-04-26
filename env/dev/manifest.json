@@ -1,1 +1,9 @@
-{}
+{
+  "artifacts": [
+    {
+      "artifact_id": "f4699269-b2fc-44f8-975d-1820f0cf613f",
+      "name": "my-dynamic-app.zip",
+      "version": "20250426171900"
+    }
+  ]
+}
