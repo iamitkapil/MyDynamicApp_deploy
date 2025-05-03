@@ -11,9 +11,9 @@
     "required_environments": []
     },
     
-    "sit": {
+    "test": {
     "branch": "main",
-    "manifest_path": "env/sit/manifest.json",
+    "manifest_path": "env/dev/manifest.json",
     "is_dev": false,
     "is_prod": false,
     "trigger_on_update": false,
@@ -22,9 +22,20 @@
     "required_environments": [["dev"]]
     },
     
-    "ppd": {
+    "preprod": {
     "branch": "main",
-    "manifest_path": "env/ppd/manifest.json",
+    "manifest_path": "env/preprod/manifest.json",
+    "is_dev": false,
+    "is_prod": false,
+    "trigger_on_update": false,
+    "promo_source_projects": [],
+    "required_validations": [], 
+    "required_environments": [["dev","sit"]]
+    }
+
+    "prod": {
+    "branch": "main",
+    "manifest_path": "env/prod/manifest.json",
     "is_dev": false,
     "is_prod": false,
     "trigger_on_update": false,

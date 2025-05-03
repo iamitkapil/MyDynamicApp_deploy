@@ -1,0 +1,51 @@
+# .github/workflows/promote.yml
+name: Promote Artifacts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'env/**/manifest.json'
+  workflow_dispatch:
+    inputs:
+      from_env:
+        description: 'Environment to promote from'
+        required: true
+      to_env:
+        description: 'Environment to promote to'
+        required: true
+
+jobs:
+  promote:
+    name: Promote ${{ github.event.inputs.from_env}} to ${{ github.event.inputs.to_env}}
+    runs-on: ubuntu-latest
+
+    env:
+      FROM_ENV: ${{ github.event.inputs.from_env }}
+      TO_ENV: ${{ github.event.inputs.to_env }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install devopx
+        run: npm install -g devopx
+
+      - name: Check if matching manifest changed
+        if: github.event_name == 'push'
+        run: |
+          echo "Checking for changed path: env/${FROM_ENV}/manifest.json"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "env/${FROM_ENV}/manifest.json" \
+            || { echo "No relevant change. Skipping promote."; exit 1; }
+
+      - name: Promote Artifacts
+        run: >
+          devopx promote-artifacts
+          --from-environment "${CI_PROJECT_PATH}:${FROM_ENV}"
+          --to-environment "${CI_PROJECT_PATH}:${TO_ENV}"
