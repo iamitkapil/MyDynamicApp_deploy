@@ -1,1 +1,5 @@
-{}
+{
+  "id": "8382ece5-1285-47b7-9eee-9272f43b0a05",
+  "env": "iamitkapil/MyDynamicApp_deploy:dev",
+  "artifacts": []
+}
