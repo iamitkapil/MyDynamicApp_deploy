@@ -1,0 +1,17 @@
+# .github/workflows/promote-test-to-preprod.yml
+name: Promote Test to PreProd
+
+on:
+  push:
+    paths:
+      - env/test/manifest.json
+    branches:
+      - main
+
+jobs:
+  call-promote:
+    uses: ./.github/workflows/promote.yml
+    with:
+      from-env: test
+      to-env: preprod
+      environment: preprod-approval

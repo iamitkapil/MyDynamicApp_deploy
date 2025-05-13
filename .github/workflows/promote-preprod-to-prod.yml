@@ -1,0 +1,17 @@
+# .github/workflows/promote-preprod-to-prod.yml
+name: Promote PreProd to Prod
+
+on:
+  push:
+    paths:
+      - env/preprod/manifest.json
+    branches:
+      - main
+
+jobs:
+  call-promote:
+    uses: ./.github/workflows/promote.yml
+    with:
+      from-env: preprod
+      to-env: prod
+      environment: prod-approval

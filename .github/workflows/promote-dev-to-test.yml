@@ -1,0 +1,17 @@
+# .github/workflows/promote-dev-to-test.yml
+name: Promote Dev to Test
+
+on:
+  push:
+    paths:
+      - env/dev/manifest.json
+    branches:
+      - main
+
+jobs:
+  call-promote:
+    uses: ./.github/workflows/promote.yml
+    with:
+      from-env: dev
+      to-env: test
+      environment: test-approval
