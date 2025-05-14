@@ -33,4 +33,4 @@ jobs:
         run: npm install -g devopx-cli
 
       - name: Promote Artifacts
-        run: devopx promote-Artifacts --from-env "${{ github.repository }}:${{ inputs.from-env }}" --to-env "${{ github.repository }}:${{ inputs.to-env }}"
+        run: devopx promote-artifacts --from-env "${{ github.repository }}:${{ inputs.from-env }}" --to-env "${{ github.repository }}:${{ inputs.to-env }}"
