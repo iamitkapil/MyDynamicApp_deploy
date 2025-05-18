@@ -12,17 +12,17 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         env: [dev, test, preprod, prod]
 
-    # Only run the job if the pushed commit affects the manifest file for the env in the matrix
-    if: contains(github.event.head_commit.message, matrix.env) || contains(github.event.head_commit.message, toJSON(github.event.commits.*.modified))
+    # Run only if the manifest file for the env in the matrix is modified in the commit
+    if: contains(join(github.event.commits.*.modified, ' '), format('env/{0}/manifest.json', matrix.env))
 
     env:
       target_env: ${{ matrix.env }}
-      target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
+      target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host","prod":"prod-host"}')[matrix.env] }}
 
     steps:
       - uses: actions/checkout@v3
@@ -30,10 +30,12 @@ jobs:
       - name: Show IP config
         run: ipconfig
 
+      - name: List modified files
+        run: echo "Modified files: ${{ join(github.event.commits.*.modified, ', ') }}"
+
       - name: Deploy to ${{ env.target_env }}
         shell: pwsh
         run: |
           Write-Host "Deploying to environment: $env:target_env"
           Write-Host "Deploying to host: $env:target_host"
-          # Call your actual deploy PowerShell script here, e.g.:
-          # .\scripts\deploy.ps1 -Environment $env:target_env -Host $env:target_host
+          # Call your deploy script here
