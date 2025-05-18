@@ -12,11 +12,12 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         env: [dev, test, preprod, prod]
 
+    # Run only if the manifest file for the env was modified in this push
     if: contains(join(github.event.commits.*.modified, ' '), 'env/' + matrix.env + '/manifest.json')
 
     env:
@@ -29,12 +30,10 @@ jobs:
       - name: Show IP config
         run: ipconfig
 
-      - name: List modified files
-        run: echo "Modified files: ${{ join(github.event.commits.*.modified, ', ') }}"
-
       - name: Deploy to ${{ env.target_env }}
         shell: pwsh
         run: |
           Write-Host "Deploying to environment: $env:target_env"
           Write-Host "Deploying to host: $env:target_host"
-          # Call your deploy script here
+          # Call your deployment script here
+          # Example: .\scripts\deploy.ps1 -Environment $env:target_env -Host $env:target_host
