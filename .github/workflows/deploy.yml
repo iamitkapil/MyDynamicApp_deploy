@@ -1,39 +1,26 @@
-name: Deploy
+name: Deploy  
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
-      - 'env/**/manifest.json'
+      - env/*/manifest.json  # match manifest.json in any env folder (dev, test, preprod, etc.)
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         env: [dev, test, preprod]
-
+    if: contains(github.event.head_commit.message, matrix.env)  # optional filter to run only matching env
     env:
+      target_env: ${{ matrix.env }}
       target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
-
-    # This condition will run the job only if the commit message contains the matrix environment name
-    if: contains(github.event.head_commit.message, matrix.env)
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Show IP config
+      - name: IP Config
         run: ipconfig
 
-      - name: Deploy to target environment
-        shell: pwsh
-        env:
-          TARGET_ENV: ${{ matrix.env }}
-          TARGET_HOST: ${{ env.target_host }}
-        run: |
-          echo "Deploying to environment: $env:TARGET_ENV"
-          echo "Target host is: $env:TARGET_HOST"
-          # Yahan aap apne PowerShell deployment commands likh sakte hain
-          # Example: Invoke-Command -ComputerName $env:TARGET_HOST -ScriptBlock { <deploy-script> }
+      - name: Deploy
+        run: echo "deploy using powershell script with the service account added to AD domain of deployment server"
