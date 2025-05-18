@@ -4,25 +4,44 @@ on:
   push:
     branches: [ main ]
     paths:
-      - env/**/manifest.json  # catch all envs
+      - env/**/manifest.json
 
 jobs:
-  deploy:
+  deploy-dev:
+    if: ${{ contains(github.event.head_commit.url, 'env/dev/manifest.json') }}
     runs-on: windows-2019
-    strategy:
-      matrix:
-        env: [dev, test, preprod]
     env:
-      target_env: ${{ matrix.env }}
-      target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
-
+      target_env: dev
+      target_host: dev-host
     steps:
       - uses: actions/checkout@v3
-
       - name: IP Config
         run: ipconfig
+      - name: Deploy to Dev
+        run: echo "Deploying to dev..."
 
-      - name: Deploy
-        if: contains(github.event.head_commit.message, matrix.env)
-        run: |
-          echo "Deploying to ${{ env.target_env }} using PowerShell script with the service account added to AD domain of deployment server"
+  deploy-test:
+    if: ${{ contains(github.event.head_commit.url, 'env/test/manifest.json') }}
+    runs-on: windows-2019
+    env:
+      target_env: test
+      target_host: test-host
+    steps:
+      - uses: actions/checkout@v3
+      - name: IP Config
+        run: ipconfig
+      - name: Deploy to Test
+        run: echo "Deploying to test..."
+
+  deploy-preprod:
+    if: ${{ contains(github.event.head_commit.url, 'env/preprod/manifest.json') }}
+    runs-on: windows-2019
+    env:
+      target_env: preprod
+      target_host: preprod-host
+    steps:
+      - uses: actions/checkout@v3
+      - name: IP Config
+        run: ipconfig
+      - name: Deploy to Preprod
+        run: echo "Deploying to preprod..."
