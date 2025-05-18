@@ -1,0 +1,28 @@
+# .github/workflows/deploy.yml
+name: Deploy  
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - env/**/manifest.json  # catch all envs
+
+jobs:
+  deploy:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        env: [dev, test, preprod]
+    if: contains(github.event.head_commit.message, matrix.env)  # optional filter
+    env:
+      target_env: ${{ matrix.env }}
+      target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: IP Config
+        run: ipconfig
+
+      - name: Deploy
+        run: echo  "deploy using powershell script with the service account added to AD domain of deployment server" 
+
