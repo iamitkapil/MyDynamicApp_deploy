@@ -1,5 +1,4 @@
-# .github/workflows/deploy.yml
-name: Deploy  
+name: Deploy
 
 on:
   push:
@@ -13,10 +12,10 @@ jobs:
     strategy:
       matrix:
         env: [dev, test, preprod]
-    if: contains(github.event.head_commit.message, matrix.env)  # optional filter
     env:
       target_env: ${{ matrix.env }}
       target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -24,5 +23,6 @@ jobs:
         run: ipconfig
 
       - name: Deploy
-        run: echo  "deploy using powershell script with the service account added to AD domain of deployment server" 
-
+        if: contains(github.event.head_commit.message, matrix.env)
+        run: |
+          echo "Deploying to ${{ env.target_env }} using PowerShell script with the service account added to AD domain of deployment server"
