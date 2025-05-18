@@ -2,64 +2,38 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
-      - env/**/manifest.json
+      - 'env/**/manifest.json'
 
 jobs:
-  deploy-dev:
-    runs-on: windows-2019
-    paths:
-      - env/dev/manifest.json
-    env:
-      target_env: dev
-      target_host: dev-host
-    steps:
-      - uses: actions/checkout@v3
-      - name: IP Config
-        run: ipconfig
-      - name: Deploy to Dev
-        run: echo "Deploying to dev..."
+  deploy:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        env: [dev, test, preprod]
 
-  deploy-test:
-    runs-on: windows-2019
-    paths:
-      - env/test/manifest.json
     env:
-      target_env: test
-      target_host: test-host
-    steps:
-      - uses: actions/checkout@v3
-      - name: IP Config
-        run: ipconfig
-      - name: Deploy to Test
-        run: echo "Deploying to test..."
+      target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
 
-  deploy-preprod:
-    runs-on: windows-2019
-    paths:
-      - env/preprod/manifest.json
-    env:
-      target_env: preprod
-      target_host: preprod-host
-    steps:
-      - uses: actions/checkout@v3
-      - name: IP Config
-        run: ipconfig
-      - name: Deploy to Preprod
-        run: echo "Deploying to preprod..."
+    # This condition will run the job only if the commit message contains the matrix environment name
+    if: contains(github.event.head_commit.message, matrix.env)
 
-  deploy-prod:
-    runs-on: windows-2019
-    paths:
-      - env/prod/manifest.json
-    env:
-      target_env: prod
-      target_host: prod-host
     steps:
-      - uses: actions/checkout@v3
-      - name: IP Config
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Show IP config
         run: ipconfig
-      - name: Deploy to Prod
-        run: echo "deploying using powershell script with the service account added to AD domain of deployment server"
-             eco "Deploy successful"
+
+      - name: Deploy to target environment
+        shell: pwsh
+        env:
+          TARGET_ENV: ${{ matrix.env }}
+          TARGET_HOST: ${{ env.target_host }}
+        run: |
+          echo "Deploying to environment: $env:TARGET_ENV"
+          echo "Target host is: $env:TARGET_HOST"
+          # Yahan aap apne PowerShell deployment commands likh sakte hain
+          # Example: Invoke-Command -ComputerName $env:TARGET_HOST -ScriptBlock { <deploy-script> }
