@@ -1,14 +1,14 @@
 {
-  "id": "556c1a41-a951-4f9e-a5ce-82dafd879e69",
+  "id": "406fb1cb-6aff-4323-b6bf-8971a6033752",
   "env": "iamitkapil/MyDynamicApp_deploy:preprod",
   "artifacts": [
     {
-      "id": "49f3cee3-f5be-4fdc-aff7-cbe85019a0e5",
+      "id": "6a306713-e7dc-4250-bc8a-99b7162c4475",
       "name": "my-dynamic-app.zip",
       "type": "code-zip",
-      "version": "20250514063334",
+      "version": "20250518145520",
       "sourcerepo": "iamitkapil/MyDynamicApp",
-      "path_to_artifactory": "http://3.91.214.239:8081/artifactory/dotnet-dynamic-app-local/ci-artifact/my-dynamic-app-20250514063334.zip"
+      "path_to_artifactory": "http://3.91.214.239:8081/artifactory/dotnet-dynamic-app-local/ci-artifact/my-dynamic-app-20250518145520.zip"
     }
   ]
 }
