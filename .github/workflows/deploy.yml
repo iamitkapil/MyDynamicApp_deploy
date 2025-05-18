@@ -8,8 +8,9 @@ on:
 
 jobs:
   deploy-dev:
-    if: ${{ contains(github.event.head_commit.url, 'env/dev/manifest.json') }}
     runs-on: windows-2019
+    paths:
+      - env/dev/manifest.json
     env:
       target_env: dev
       target_host: dev-host
@@ -21,8 +22,9 @@ jobs:
         run: echo "Deploying to dev..."
 
   deploy-test:
-    if: ${{ contains(github.event.head_commit.url, 'env/test/manifest.json') }}
     runs-on: windows-2019
+    paths:
+      - env/test/manifest.json
     env:
       target_env: test
       target_host: test-host
@@ -34,8 +36,9 @@ jobs:
         run: echo "Deploying to test..."
 
   deploy-preprod:
-    if: ${{ contains(github.event.head_commit.url, 'env/preprod/manifest.json') }}
     runs-on: windows-2019
+    paths:
+      - env/preprod/manifest.json
     env:
       target_env: preprod
       target_host: preprod-host
@@ -45,3 +48,18 @@ jobs:
         run: ipconfig
       - name: Deploy to Preprod
         run: echo "Deploying to preprod..."
+
+  deploy-prod:
+    runs-on: windows-2019
+    paths:
+      - env/prod/manifest.json
+    env:
+      target_env: prod
+      target_host: prod-host
+    steps:
+      - uses: actions/checkout@v3
+      - name: IP Config
+        run: ipconfig
+      - name: Deploy to Prod
+        run: echo "deploying using powershell script with the service account added to AD domain of deployment server"
+             eco "Deploy successful"
