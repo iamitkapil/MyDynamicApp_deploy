@@ -17,8 +17,7 @@ jobs:
       matrix:
         env: [dev, test, preprod, prod]
 
-    # Run only if the manifest file for the env in the matrix is modified in the commit
-    if: contains(join(github.event.commits.*.modified, ' '), format('env/{0}/manifest.json', matrix.env))
+    if: contains(join(github.event.commits.*.modified, ' '), 'env/' + matrix.env + '/manifest.json')
 
     env:
       target_env: ${{ matrix.env }}
