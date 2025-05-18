@@ -1,26 +1,39 @@
-name: Deploy  
+name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
-      - env/*/manifest.json  # match manifest.json in any env folder (dev, test, preprod, etc.)
+      - env/dev/manifest.json
+      - env/test/manifest.json
+      - env/preprod/manifest.json
+      - env/prod/manifest.json
 
 jobs:
   deploy:
     runs-on: windows-2019
     strategy:
       matrix:
-        env: [dev, test, preprod]
-    if: contains(github.event.head_commit.message, matrix.env)  # optional filter to run only matching env
+        env: [dev, test, preprod, prod]
+
+    # Only run the job if the pushed commit affects the manifest file for the env in the matrix
+    if: contains(github.event.head_commit.message, matrix.env) || contains(github.event.head_commit.message, toJSON(github.event.commits.*.modified))
+
     env:
       target_env: ${{ matrix.env }}
       target_host: ${{ fromJson('{"dev":"dev-host","test":"test-host","preprod":"preprod-host"}')[matrix.env] }}
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: IP Config
+      - name: Show IP config
         run: ipconfig
 
-      - name: Deploy
-        run: echo "deploy using powershell script with the service account added to AD domain of deployment server"
+      - name: Deploy to ${{ env.target_env }}
+        shell: pwsh
+        run: |
+          Write-Host "Deploying to environment: $env:target_env"
+          Write-Host "Deploying to host: $env:target_host"
+          # Call your actual deploy PowerShell script here, e.g.:
+          # .\scripts\deploy.ps1 -Environment $env:target_env -Host $env:target_host
