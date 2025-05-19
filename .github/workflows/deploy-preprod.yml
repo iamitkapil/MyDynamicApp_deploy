@@ -23,6 +23,6 @@ jobs:
       - name: Deploy to Preprod
         shell: pwsh
         run: |
-          Write-Host "Deploying  using powershell script with the service account added to AD domain of deployment server"
-          Write-Host "Deployment to environment: $env:target_env successful"
-          # .\scripts\deploy.ps1 -Environment $env:target_env -Host $env:target_host
+          echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
+          echo "Deployment to environment: $env:target_env successful"
+          
