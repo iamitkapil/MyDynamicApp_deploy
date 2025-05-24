@@ -1,5 +1,5 @@
 # .github/workflows/promote-dev-to-test.yml
-name: Promote Dev to Test
+#name: Promote dev to Test
 
 on:
   push:
@@ -9,7 +9,28 @@ on:
       - main
 
 jobs:
+  deploy:
+    name: Deploy to Dev
+    runs-on: windows-2019
+    env:
+      target_env: dev
+      target_host: dev-host
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Show IP config
+        run: ipconfig
+
+      - name: Deploy to Dev
+        shell: pwsh
+        run: |
+          echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
+          echo "Deployment to environment: $env:target_env successful"
+
+
   call-promote:
+    name: Promote Dev to Test
     uses: ./.github/workflows/promote.yml
     with:
       from-env: dev

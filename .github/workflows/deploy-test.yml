@@ -1,27 +1,27 @@
-name: Deploy to Test
+# name: Deploy to Test
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - env/test/manifest.json
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - env/test/manifest.json
 
-jobs:
-  deploy:
-    runs-on: windows-2019
-    env:
-      target_env: test
-      target_host: test-host
+# jobs:
+#   deploy:
+#     runs-on: windows-2019
+#     env:
+#       target_env: test
+#       target_host: test-host
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - name: Show IP config
-        run: ipconfig
+#       - name: Show IP config
+#         run: ipconfig
 
-      - name: Deploy to Test
-        shell: pwsh
-        run: |
-          echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
-          echo "Deployment to environment: $env:target_env successful"
+#       - name: Deploy to Test
+#         shell: pwsh
+#         run: |
+#           echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
+#           echo "Deployment to environment: $env:target_env successful"

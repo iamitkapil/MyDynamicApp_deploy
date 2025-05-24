@@ -1,5 +1,5 @@
 # .github/workflows/promote-preprod-to-prod.yml
-name: Promote PreProd to Prod
+#name: Promote PreProd to Prod
 
 on:
   push:
@@ -9,7 +9,28 @@ on:
       - main
 
 jobs:
+
+  deploy:
+    name: Deploy to Preprod
+    runs-on: windows-2019
+    env:
+      target_env: preprod
+      target_host: preprod-host
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Show IP config
+        run: ipconfig
+
+      - name: Deploy to Preprod
+        shell: pwsh
+        run: |
+          echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
+          echo "Deployment to environment: $env:target_env successful"
+
   call-promote:
+    name: Promote Preprod to Prod
     uses: ./.github/workflows/promote.yml
     with:
       from-env: preprod
