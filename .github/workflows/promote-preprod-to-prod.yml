@@ -22,12 +22,21 @@ jobs:
 
       - name: Show IP config
         run: ipconfig
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install devopx-cli
+        run: npm install -g devopx-cli
 
       - name: Deploy to Preprod
         shell: pwsh
         run: |
           echo "Deploying  using powershell script with the service account added to AD domain of deployment server"
           echo "Deployment to environment: $env:target_env successful"
+          devopx post-deploy --environment "${{ github.repository }}:preprod"
 
   call-promote:
     name: Promote Preprod to Prod
