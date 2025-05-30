@@ -6,7 +6,7 @@
     "is_prod": false,
     "trigger_on_update": false,
     "promo_source_projects": [],
-    "required_validations": [veracode-scan],
+    "required_validations": [],
     "required_environments": []
     },
     
@@ -17,7 +17,7 @@
     "is_prod": false,
     "trigger_on_update": false,
     "promo_source_projects": [],
-    "required_validations": [], 
+    "required_validations": ["veracode-scan"], 
     "required_environments": [["dev"]]
     },
     
